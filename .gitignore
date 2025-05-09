@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.so
+
+# Virtualenv
+.venv/
+venv/
+ENV/
+
+# macOS
+.DS_Store
+
+# Editor/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test/coverage
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Logs
+*.log
+
+# Env files
+.env
+.env.*
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# SQLite/DB
+*.sqlite3
+*.db
+
+# Misc
+*.bak
+*.tmp
+
+# Node (if front-end exists)
+node_modules/
+
+# Jupyter
+.ipynb_checkpoints/

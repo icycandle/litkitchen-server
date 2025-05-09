@@ -1,0 +1,24 @@
+- 專案使用 FastAPI
+- 開發用 doc 在 docs/*.md
+- 設計風格優先考慮 clean architecture 或 DDD
+
+# 收到我的指示時
+- 如果要求根據 tasks.md 執行任務，請在完成任務之後更新 tasks.md 的 task 狀態:
+    - `[x]` 代表已處理
+    - `[ ]` 代表未處理
+- 如果不是根據 tasks.md 來執行任務，請將我的要求簡短記錄到 dev-plan.md 的 ADR 區塊中。
+
+# 執行指令時
+- 使用 poetry. 請執行 poetry add 指令新增對應的 packege.
+- 使用 poetry run 來執行專案的 locahost python 指令，除非在 docker container 中
+
+# 實作指令時
+- cli 的實作使用 typer ，並參考同 repo 其他檔案的實作方式
+
+# 實作新功能時
+- 新功能請以 pytest 實作 unit-test, 並以 poetry run pytest 來執行
+- 如果舊功能的 unit-test 被新功能實作的過程改壞了，請避免修改舊功能。而是優先考慮新功能實作是否有意料之外的副作用。
+- 如果不是 unit-test，請加上 pytest mark 如 `@pytest.mark.integration` 或 `@pytest.mark.e2e`
+
+# Coding style
+- 我們用 python 3.13，type annotation 不要使用  `Dict` `List` `Optional`,  請使用 `dict`, `list`, `| None`
