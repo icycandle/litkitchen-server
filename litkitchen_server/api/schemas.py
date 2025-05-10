@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class PrintJobStatus(str, Enum):
@@ -42,7 +43,7 @@ class TextVariantSchema(BaseModel):
     variant_index: int = 0
     length: int = 0
     approved: bool = False
-    created_at: str = ""
+    created_at: datetime = None
     print_count: int = 0
 
 

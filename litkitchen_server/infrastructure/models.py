@@ -127,3 +127,15 @@ class BarcodeMappingOrm(SQLModel, table=True):
             description=self.description,
             created_at=self.created_at,
         )
+
+    @staticmethod
+    def from_domain(domain: "BarcodeMapping") -> "BarcodeMappingOrm":
+        return BarcodeMappingOrm(
+            id=domain.id,
+            barcode=domain.barcode,
+            main_dish_text_id=domain.main_dish_text_id,
+            side_dish_media_id=domain.side_dish_media_id,
+            drink_style_id=domain.drink_style_id,
+            description=domain.description,
+            created_at=domain.created_at,
+        )

@@ -2,7 +2,11 @@ import typer
 import csv
 from pathlib import Path
 from litkitchen_server.application.services import TextVariantService
-from litkitchen_server.infrastructure.repository_sqlite import SqliteRepository
+from sqlmodel import Session
+from litkitchen_server.infrastructure.text_variant_repository import (
+    TextVariantRepository,
+)
+from litkitchen_server.infrastructure.repository_sqlite import engine
 from litkitchen_server.infrastructure.models import TextVariantOrm
 import os
 
@@ -31,9 +35,10 @@ def import_csv(csv_path: str):
                 approved=row.get("approved", "False").lower() in ("1", "true", "yes"),
                 print_count=int(row["print_count"]) if row.get("print_count") else 0,
             )
-            repo = SqliteRepository()
-            service = TextVariantService(repo)
-            service.create_textvariant(tv)
+            with Session(engine) as session:
+                repo = TextVariantRepository(session)
+                service = TextVariantService(repo)
+                service.create_textvariant(tv)
     typer.echo("批次匯入完成")
 
 
