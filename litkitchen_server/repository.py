@@ -22,18 +22,17 @@ cursor = conn.cursor()
 
 
 def init_db():
-    # 僅當 DB 檔不存在時自動初始化 schema
-    if not os.path.exists(DB_PATH):
-        with open(
-            os.path.join(os.path.dirname(__file__), "../sql/schema.sql"),
-            "r",
-            encoding="utf-8",
-        ) as f:
-            sql_script = f.read()
-        for stmt in sql_script.split(";"):
-            if stmt.strip():
-                cursor.execute(stmt)
-        conn.commit()
+    # 每次都執行 schema.sql，確保所有 table 存在（CREATE TABLE IF NOT EXISTS）
+    with open(
+        os.path.join(os.path.dirname(__file__), "../sql/schema.sql"),
+        "r",
+        encoding="utf-8",
+    ) as f:
+        sql_script = f.read()
+    for stmt in sql_script.split(";"):
+        if stmt.strip():
+            cursor.execute(stmt)
+    conn.commit()
 
 
 init_db()

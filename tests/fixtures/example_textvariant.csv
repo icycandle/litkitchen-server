@@ -1,0 +1,4 @@
+main_dish_text_id,side_dish_media_id,drink_style_id,content,variant_index,length,approved,print_count
+1,10,100,"示例內容一",0,6,True,2
+2,20,200,"示例內容二",1,6,False,0
+3,30,300,"Another Example",0,15,True,1

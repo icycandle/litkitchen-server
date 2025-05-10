@@ -17,7 +17,8 @@
 
 - [x] Repo 資料持久化（接 SQLite）
     - [x] 用 SQLModel 定義所有資料表。
-- [ ] TextVariant 支援批次上傳/匯入（如 CSV）
+- [ ] TextVariant 支援批次上傳/匯入（support CSV）
+    - [ ] 實作 typer cli 指令
 - [ ] `/select` endpoint（依三參數隨機選取 TextVariant）
 - [ ] PrintJob 狀態自動更新（背景任務、非同步印表機整合）
 - [ ] API 權限管理與驗證（如管理端操作）

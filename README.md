@@ -31,6 +31,18 @@ poetry install
    poetry run pytest
    ```
 
+## CLI 指令
+
+初始化資料庫（若 DB 檔不存在）：
+```bash
+sqlite3 db.sqlite3 < sql/schema.sql
+```
+
+批次匯入 TextVariant 資料：
+```bash
+LITKITCHEN_DB_PATH=db.sqlite3 poetry run python -m litkitchen_server.cli_textvariant tests/fixtures/example_textvariant.csv
+```
+
 ## 啟動 FastAPI 服務
 
 ```bash
