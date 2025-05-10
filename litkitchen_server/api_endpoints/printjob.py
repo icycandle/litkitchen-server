@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 
 from litkitchen_server.infrastructure import printer
 from litkitchen_server.repository import _db
-from litkitchen_server.schemas import PrintJobSchema
+from litkitchen_server.api.schemas import PrintJobSchema
 
 router = APIRouter()
 

@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter
 
 from litkitchen_server.repository import _db
-from litkitchen_server.schemas import (
+from litkitchen_server.api.schemas import (
     DrinkStyleSchema,
     MainDishTextSchema,
     SideDishMediaSchema,

@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 
 from litkitchen_server.repository import _db
-from litkitchen_server.schemas import TextVariantSchema
+from litkitchen_server.api.schemas import TextVariantSchema
 from fastapi import Query
 
 router = APIRouter()

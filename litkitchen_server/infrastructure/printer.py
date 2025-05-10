@@ -1,6 +1,3 @@
-# Infrastructure stub for DB, printer, and external API integration
-
-
 class Printer:
     def __init__(self):
         self.status = "ready"  # could be ready, printing, error, out_of_paper
