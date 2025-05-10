@@ -22,66 +22,18 @@ cursor = conn.cursor()
 
 
 def init_db():
-    cursor.execute(
-        """CREATE TABLE IF NOT EXISTS maindishtexts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        author_name TEXT,
-        work_title TEXT,
-        main_dish TEXT,
-        publisher TEXT,
-        genre TEXT,
-        description TEXT
-    )"""
-    )
-    cursor.execute(
-        """CREATE TABLE IF NOT EXISTS sidedishmedias (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        media_type TEXT,
-        side_dish TEXT
-    )"""
-    )
-    cursor.execute(
-        """CREATE TABLE IF NOT EXISTS drinkstyles (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        style TEXT,
-        drink TEXT
-    )"""
-    )
-    cursor.execute(
-        """CREATE TABLE IF NOT EXISTS textvariants (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        main_dish_text_id INTEGER,
-        side_dish_media_id INTEGER,
-        drink_style_id INTEGER,
-        content TEXT,
-        variant_index INTEGER,
-        length INTEGER,
-        approved BOOLEAN,
-        created_at TEXT,
-        print_count INTEGER
-    )"""
-    )
-    cursor.execute(
-        """CREATE TABLE IF NOT EXISTS printjobs (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        text_variant_id INTEGER,
-        status TEXT,
-        created_at TEXT,
-        printed_at TEXT
-    )"""
-    )
-    cursor.execute(
-        """CREATE TABLE IF NOT EXISTS barcodemappings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        barcode TEXT,
-        main_dish_text_id INTEGER,
-        side_dish_media_id INTEGER,
-        drink_style_id INTEGER,
-        description TEXT,
-        created_at TEXT
-    )"""
-    )
-    conn.commit()
+    # 僅當 DB 檔不存在時自動初始化 schema
+    if not os.path.exists(DB_PATH):
+        with open(
+            os.path.join(os.path.dirname(__file__), "../sql/schema.sql"),
+            "r",
+            encoding="utf-8",
+        ) as f:
+            sql_script = f.read()
+        for stmt in sql_script.split(";"):
+            if stmt.strip():
+                cursor.execute(stmt)
+        conn.commit()
 
 
 init_db()

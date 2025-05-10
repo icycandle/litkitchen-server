@@ -15,7 +15,8 @@
 
 ## 尚未完成/可優化任務
 
-- [ ] Repo 資料持久化（接 SQLite）
+- [x] Repo 資料持久化（接 SQLite）
+    - [x] 用 SQLModel 定義所有資料表。
 - [ ] TextVariant 支援批次上傳/匯入（如 CSV）
 - [ ] `/select` endpoint（依三參數隨機選取 TextVariant）
 - [ ] PrintJob 狀態自動更新（背景任務、非同步印表機整合）

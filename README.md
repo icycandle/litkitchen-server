@@ -49,6 +49,14 @@ poetry run uvicorn main:app --reload
 - isort
 - pre-commit
 
----
 
-如需更多協助，請參考各套件官方文件或聯絡專案維護者。
+## 資料庫 schema 管理規範
+
+- 專案資料表結構統一維護於 `sql/schema.sql`，所有 SQLite 資料表皆以此檔案為唯一來源。
+- **何時要修改？**
+  - 需要新增、修改、刪除資料表或欄位時，請直接編輯 `sql/schema.sql`。
+  - 修改 schema 後，請同步確認 `repository.py` 的 CRUD 操作是否需要一併調整。
+  - 直接刪除之後再重新初始化
+  - 要準備 import from CSV 的 typer cli 指令
+- **新環境初始化：**
+  - 專案啟動時若偵測到資料庫檔案不存在，會自動執行 `sql/schema.sql` 初始化所有資料表。
