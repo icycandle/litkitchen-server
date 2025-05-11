@@ -21,7 +21,9 @@ DB_PATH = os.environ.get(
     os.path.join(os.path.dirname(__file__), "../db.sqlite3"),
 )
 DATABASE_URL = f"sqlite:///{DB_PATH}"
-engine = create_engine(DATABASE_URL, echo=False)
+engine = create_engine(
+    DATABASE_URL, echo=False, connect_args={"check_same_thread": False}
+)
 
 
 def get_session():

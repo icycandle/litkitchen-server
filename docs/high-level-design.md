@@ -83,37 +83,39 @@
 - `GET /options/maindish`：取得所有主食文本（MainDishText）選項 (開發除錯用，非必要)
 - `GET /options/sidedish`：取得所有配餐媒材（SideDishMedia）選項 (開發除錯用，非必要)
 - `GET /options/drinkstyle`：取得所有飲品風格（DrinkStyle）選項 (開發除錯用，非必要)
-- `POST /select`：參數 main_dish_text_id, side_dish_media_id, drink_style_id，回傳隨機預生成文本（TextVariant）
-- `POST /print`：參數 text_variant_id，送出列印任務（PrintJob）
-- `GET /print-jobs/{id}`：查詢列印任務狀態（PrintJob）
+- `GET /pick-best`：參數 main_dish_text_id, side_dish_media_id, drink_style_id，回傳推薦預生成文本（TextVariant）
+- `POST /print-jobs`：參數 text_variant_id，送出列印任務（PrintJob）
+- `GET /print-jobs/{job_id}`：查詢列印任務狀態（PrintJob）
 
 #### 2. 管理/內容審核 API
 
-- `GET /text-variants`：查詢預生成文本 (開發除錯用，確認內容數量正確，非必要)
 - `GET /barcode-mappings`：查詢所有條碼映射
 - `POST /barcode-mappings`：新增條碼映射
-- `DELETE /barcode-mappings/{id}`：刪除條碼映射
+- `DELETE /barcode-mappings/{item_id}`：刪除條碼映射
+- `GET /text-variants/{item_id}`：查詢單一預生成文本（TextVariant）
 
-#### 3. 預生成文本批次管理
+#### 3. PrintJob 管理
 
-- `POST /batch-upload`：上傳 CSV 檔案，覆蓋所有文本
+- `GET /print-jobs`：查詢所有列印任務（PrintJob）
+- `PUT /print-jobs/{job_id}`：更新列印任務狀態
+- `DELETE /print-jobs/{job_id}`：刪除列印任務
+
+#### 4. 系統狀態與印表機
+
+- `GET /printer-status`：查詢印表機狀態
+- `GET /system-state`：查詢系統狀態
+- `POST /system-state/reset`：重置系統狀態
 
 ---
 
 ### 系統流程對應
 
 1. 使用者從前端（平板/網頁）webcam 掃 barcode 選擇參數（主食文本、配餐媒材、飲品風格）
-2. 前端呼叫 `/select` 傳入三個參數 ID，取得隨機文本，確定文本存在
-3. 前端呼叫 `/print` 傳入文本 ID，送出列印任務
+2. 前端呼叫 `GET /pick-best` 傳入三個參數 ID，取得隨機文本，確定文本存在
+3. 前端呼叫 `POST /print-jobs` 傳入文本 ID，送出列印任務
 4. 後端查詢本地資料庫，將文本送至熱感應印表機
-5. 前端每隔一秒呼叫 `/print-jobs/{id}`，查詢列印任務狀態
-6. 前端根據列印任務狀態顯示不同畫面，列印完成後 5 秒自動呼叫 `/state/reset` 重置系統
-
----
-
-### 進階建議
-- 可設計 `/stats` API，統計各種組合被選取/列印次數，作為現場互動分析依據
-- 若需支援條碼掃描，可設計 `/scan` API，根據條碼回傳對應參數組合或文本
+5. 前端每隔一秒呼叫 `GET /print-jobs/{id}`，查詢列印任務狀態
+6. 前端根據列印任務狀態顯示不同畫面，列印完成後 5 秒自動呼叫 `POST /system-state/reset` 重置系統
 
 ---
 

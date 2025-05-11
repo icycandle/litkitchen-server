@@ -11,7 +11,7 @@ class PrintJobStatus(str, Enum):
 
 
 class MainDishText(BaseModel):
-    id: int
+    id: int | None = None
     author_name: str
     work_title: str
     main_dish: str
@@ -21,19 +21,19 @@ class MainDishText(BaseModel):
 
 
 class SideDishMedia(BaseModel):
-    id: int
+    id: int | None = None
     media_type: str
     side_dish: str
 
 
 class DrinkStyle(BaseModel):
-    id: int
+    id: int | None = None
     style: str
     drink: str
 
 
 class TextVariant(BaseModel):
-    id: int
+    id: int | None = None
     main_dish_text_id: int
     side_dish_media_id: int
     drink_style_id: int
@@ -46,7 +46,7 @@ class TextVariant(BaseModel):
 
 
 class PrintJob(BaseModel):
-    id: int
+    id: int | None = None
     text_variant_id: int
     status: PrintJobStatus = PrintJobStatus.queued
     created_at: datetime = datetime.now()
@@ -54,7 +54,7 @@ class PrintJob(BaseModel):
 
 
 class BarcodeMapping(BaseModel):
-    id: int
+    id: int | None = None
     barcode: str
     main_dish_text_id: int
     side_dish_media_id: int
