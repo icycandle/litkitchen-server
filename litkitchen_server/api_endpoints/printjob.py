@@ -100,7 +100,7 @@ def delete_print_job(
 
 @router.get("/printer-status")
 def get_printer_status():
-    return {"status": printer.get_status()}
+    return {"status": printer.printer.get_status()}
 
 
 SYSTEM_STATE = {"state": "idle", "last_reset": time.time()}

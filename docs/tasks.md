@@ -34,9 +34,9 @@
 - [x] e2e-test DELETE /print-jobs/{job_id}
 
 #### 其他系統 API
-- [ ] e2e-test GET /printer-status
-- [ ] e2e-test GET /system-state
-- [ ] e2e-test POST /system-state/reset
+- [x] e2e-test GET /printer-status
+- [x] e2e-test GET /system-state
+- [x] e2e-test POST /system-state/reset
 
 ## 尚未完成/可優化任務
 
