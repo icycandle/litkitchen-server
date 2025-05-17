@@ -1,0 +1,19 @@
+services:
+  litkitchen-server:
+    build: .
+    container_name: litkitchen-server
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "18000:8000"
+    volumes:
+      - .:/app
+    # 進入 container 後可手動 bash script/install.sh
+    # 測試 systemd 啟動服務（需特權模式）
+    privileged: true
+    stop_signal: SIGRTMIN+3
+    command: ["/lib/systemd/systemd"]
+    # 若要測試實體印表機，需將 USB 裝置掛載進 container
+    # devices:
+    #   - "/dev/bus/usb:/dev/bus/usb"
+    restart: unless-stopped

@@ -1,0 +1,16 @@
+[Unit]
+Description=LitKitchen FastAPI Server
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/litkitchen-server
+# 若要支援 root 或 pi 用戶，建議用 /usr/bin/env 動態尋找 poetry
+ExecStart=/usr/bin/env poetry run uvicorn litkitchen_server.main:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
