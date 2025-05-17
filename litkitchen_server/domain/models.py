@@ -4,10 +4,13 @@ from pydantic import BaseModel
 
 
 class PrintJobStatus(str, Enum):
-    queued = "queued"
-    printing = "printing"
-    done = "done"
-    failed = "failed"
+    queued = "queued"  # 等待列印
+    ready = "ready"  # 印表機就緒
+    printing = "printing"  # 列印中
+    done = "done"  # 完成
+    failed = "failed"  # 列印失敗
+    error = "error"  # 裝置錯誤
+    out_of_paper = "out_of_paper"  # 缺紙
 
 
 class MainDishText(BaseModel):
