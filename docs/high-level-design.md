@@ -63,7 +63,6 @@
    - text_variant_id (外鍵)
    - status (queued, printing, done, failed)
    - created_at
-   - printed_at
 
 #### 印表機狀態與非同步設計
 - 熱感應印表機（如 Epson TM-T88VI）有自身的狀態（就緒、列印中、缺紙、錯誤等），列印請求需非同步處理。

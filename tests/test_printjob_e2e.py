@@ -32,7 +32,6 @@ def test_get_print_jobs(monkeypatch):
         text_variant_id=1,
         status="queued",
         created_at=datetime(2025, 1, 1, 0, 0, 0),
-        printed_at=None,
     )
     created = repo.create(pj)
     resp = client.get("/print-jobs")
@@ -57,7 +56,6 @@ def test_post_print_job(monkeypatch):
         "text_variant_id": 1,
         "status": "queued",
         "created_at": datetime(2025, 1, 1, 0, 0, 0).isoformat(),
-        "printed_at": None,
     }
     resp = client.post("/print-jobs", json=payload)
     assert resp.status_code == 200
@@ -77,7 +75,6 @@ def test_get_print_job_by_id(monkeypatch):
         text_variant_id=1,
         status="queued",
         created_at=datetime(2025, 1, 1, 0, 0, 0),
-        printed_at=None,
     )
     created = repo.create(pj)
     resp = client.get(f"/print-jobs/{created.id}")
@@ -98,7 +95,6 @@ def test_put_print_job(monkeypatch):
         text_variant_id=1,
         status="queued",
         created_at=datetime(2025, 1, 1, 0, 0, 0),
-        printed_at=None,
     )
     created = repo.create(pj)
     from datetime import datetime
@@ -108,7 +104,6 @@ def test_put_print_job(monkeypatch):
         "text_variant_id": 1,
         "status": "printing",
         "created_at": datetime(2025, 1, 1, 0, 0, 0).isoformat(),
-        "printed_at": None,
     }
     resp = client.put(f"/print-jobs/{created.id}", json=update_payload)
     assert resp.status_code == 200
@@ -128,7 +123,6 @@ def test_delete_print_job(monkeypatch):
         text_variant_id=1,
         status="queued",
         created_at=datetime(2025, 1, 1, 0, 0, 0),
-        printed_at=None,
     )
     created = repo.create(pj)
     resp = client.delete(f"/print-jobs/{created.id}")

@@ -95,7 +95,6 @@ class PrintJobOrm(SQLModel, table=True):
     text_variant_id: int
     status: str = "queued"
     created_at: datetime = Field(default_factory=datetime.now)
-    printed_at: datetime | None = None
 
     def to_domain(self) -> PrintJob:
         return PrintJob(
@@ -103,7 +102,6 @@ class PrintJobOrm(SQLModel, table=True):
             text_variant_id=self.text_variant_id,
             status=PrintJobStatus(self.status),
             created_at=self.created_at,
-            printed_at=self.printed_at,
         )
 
 

@@ -12,6 +12,19 @@ class PrintJobStatus(str, Enum):
     error = "error"  # 裝置錯誤
     out_of_paper = "out_of_paper"  # 缺紙
 
+    _description_map = {
+        "queued": "等待列印",
+        "ready": "印表機就緒",
+        "printing": "列印中",
+        "done": "列印完成",
+        "failed": "列印失敗",
+        "error": "裝置錯誤，請檢查印表機",
+        "out_of_paper": "缺紙，請補充紙捲",
+    }
+
+    def description(self) -> str:
+        return self._description_map.get(self.value, "未知狀態")
+
 
 class MainDishText(BaseModel):
     id: int | None = None
@@ -53,7 +66,6 @@ class PrintJob(BaseModel):
     text_variant_id: int
     status: PrintJobStatus = PrintJobStatus.queued
     created_at: datetime = datetime.now()
-    printed_at: datetime | None = None
 
 
 class BarcodeMapping(BaseModel):

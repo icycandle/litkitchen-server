@@ -168,7 +168,6 @@ def test_crud_printjob(monkeypatch):
             text_variant_id=1,
             status=PrintJobStatus.queued,
             created_at=datetime.now(),
-            printed_at=None,
         )
         created = repo.create(item)
         assert created.id is not None

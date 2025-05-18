@@ -6,14 +6,24 @@ import logging
 from litkitchen_server.domain.models import PrintJobStatus
 
 
+import queue
+import threading
+import time
+from functools import lru_cache
+
+
 class ReceiptPrinterService:
+    """
+    印表機硬體操作服務，僅負責與實體印表機溝通，不處理 queue 或 worker。
+    """
+
     def __init__(self):
         self.status = PrintJobStatus.ready
         self.vendor_id = 0x04B8
         self.product_id = 0x0202
         self.font_path = "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"
         self.font_size = 28
-        self.chars_per_line = 13
+        self.chars_per_line = 16
         self.line_height = 36
         self.img_width = 384
 
@@ -30,19 +40,53 @@ class ReceiptPrinterService:
             p = Usb(self.vendor_id, self.product_id, 0)
             p.image(img)
             p.cut()
-            self.status = PrintJobStatus.ready
+            self.status = PrintJobStatus.done
             return True
         except Exception as e:
             logging.error(f"Printer error: {e}")
-            # TODO: 根據例外訊息可進一步細分狀態
             if "out of paper" in str(e).lower():
                 self.status = PrintJobStatus.out_of_paper
             else:
                 self.status = PrintJobStatus.error
             return False
 
-    def get_status(self) -> str:
-        return self.status.value
+
+class PrinterWorker:
+    """
+    負責印表機任務 queue 與背景 worker。
+    外部只需呼叫 submit_print(text) 送列印任務，狀態查詢用 get_status。
+    """
+
+    _queue = queue.Queue(maxsize=1)
+
+    def __init__(self, printer: ReceiptPrinterService):
+        self.printer = printer
+        threading.Thread(target=self._worker, daemon=True).start()
+
+    def submit_print(self, text: str) -> bool:
+        try:
+            self._queue.put(text, block=False)
+            return True
+        except queue.Full:
+            logging.warning("Printer queue is full. Rejecting new print job.")
+            return False
+
+    def _worker(self):
+        while True:
+            text = self._queue.get()
+            try:
+                self.printer.print_text(text)
+            finally:
+                self._queue.task_done()
+                time.sleep(0.1)
+
+    def get_status(self) -> PrintJobStatus:
+        return self.printer.status
 
 
-printer = ReceiptPrinterService()
+@lru_cache()
+def get_printer_worker() -> PrinterWorker:
+    return PrinterWorker(printer=ReceiptPrinterService())
+
+
+printer_worker = get_printer_worker()

@@ -105,7 +105,6 @@ class PrintJobSchema(BaseModel):
     text_variant_id: int
     status: str
     created_at: str = ""
-    printed_at: str | None = None
 
     model_config = {
         "json_schema_extra": {
@@ -115,7 +114,6 @@ class PrintJobSchema(BaseModel):
                     "text_variant_id": 1,
                     "status": "queued",
                     "created_at": "2025-01-01T00:00:00",
-                    "printed_at": None,
                 }
             ]
         }
@@ -126,14 +124,14 @@ class PrintJobSchema(BaseModel):
         status = data.get("status")
         if status and not isinstance(status, str):
             data["status"] = status.value
-        # created_at/printed_at: datetime or str
-        for field in ("created_at", "printed_at"):
+        # created_at: datetime or str
+        for field in ("created_at",):
             v = data.get(field)
             if v and not isinstance(v, str):
                 data[field] = v.isoformat()
         super().__init__(**data)
 
-    @field_serializer("created_at", "printed_at", mode="plain")
+    @field_serializer("created_at", mode="plain")
     def serialize_dt(self, value):
         if value is None:
             return None
@@ -146,7 +144,6 @@ class PrintJobSchema(BaseModel):
             text_variant_id=domain.text_variant_id,
             status=domain.status,
             created_at=domain.created_at.isoformat() if domain.created_at else "",
-            printed_at=domain.printed_at.isoformat() if domain.printed_at else None,
         )
 
 

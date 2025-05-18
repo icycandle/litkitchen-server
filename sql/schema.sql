@@ -40,7 +40,6 @@ CREATE TABLE IF NOT EXISTS printjobs (
     text_variant_id INTEGER,
     status TEXT,
     created_at TEXT,
-    printed_at TEXT
 );
 
 CREATE TABLE IF NOT EXISTS barcodemappings (

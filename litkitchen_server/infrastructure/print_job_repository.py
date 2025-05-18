@@ -20,7 +20,6 @@ class PrintJobRepository:
             text_variant_id=item.text_variant_id,
             status=item.status.value,
             created_at=item.created_at,
-            printed_at=item.printed_at,
         )
         self.session.add(orm)
         self.session.commit()
@@ -34,7 +33,6 @@ class PrintJobRepository:
         db_item.text_variant_id = item.text_variant_id
         db_item.status = item.status.value
         db_item.created_at = item.created_at
-        db_item.printed_at = item.printed_at
         self.session.add(db_item)
         self.session.commit()
         self.session.refresh(db_item)
