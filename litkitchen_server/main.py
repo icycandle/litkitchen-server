@@ -1,5 +1,12 @@
 from fastapi import FastAPI
 from litkitchen_server.api.routers import router as api_router
+from litkitchen_server import settings
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn=settings.SENTRY_DSN,
+    send_default_pii=settings.SENTRY_SEND_DEFAULT_PII,
+)
 
 app = FastAPI(title="litkitchen-server")
 
