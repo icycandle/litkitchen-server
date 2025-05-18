@@ -1,9 +1,8 @@
 import os
 from sqlmodel import SQLModel, create_engine
+from litkitchen_server.settings import REPO_ROOT
 
-DB_PATH = os.environ.get(
-    "LITKITCHEN_DB_PATH", os.path.join(os.path.dirname(__file__), "../db.sqlite3")
-)
+DB_PATH = os.environ.get("LITKITCHEN_DB_PATH", os.path.join(REPO_ROOT, "db.sqlite3"))
 DATABASE_URL = f"sqlite:///{DB_PATH}"
 engine = create_engine(DATABASE_URL, echo=False)
 
