@@ -25,7 +25,7 @@ else
     export PATH="$HOME/.local/bin:$PATH"
 fi
 # 3. 安裝專案相依
-cd "$(dirname "$0")/.."
+cd /app
 poetry install
 
 # 4. 設定 udev 規則（Epson TM-T88VI）
@@ -34,7 +34,17 @@ echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0202", MODE=
 $SUDO udevadm control --reload
 $SUDO udevadm trigger
 
-# 5. 提示用戶重插印表機
+# 5. 安裝 Epson TM 系列 CUPS 驅動
+printf '\n[INFO] 自動下載並安裝 Epson TM 系列 CUPS 驅動\n'
+curl -L -O https://download3.ebz.epson.net/dsc/f/03/00/15/43/85/48dcd8b5c280c4d4fa10a23b3997eb05872b7ba2/tmx-cups-src-ThermalReceipt-3.0.0.0.tar.gz
+
+tar -zxvf tmx-cups-src-ThermalReceipt-3.0.0.0.tar.gz
+cd tmx-cups-src-ThermalReceipt-3.0.0.0/Thermal\ Receipt
+$SUDO ./build.sh
+$SUDO ./install.sh
+cd /app
+
+# 6. 提示用戶重插印表機
 printf '\n[INFO] 請重新插拔印表機，或重啟 Raspberry Pi 以套用 USB 權限設定\n'
 
 # 6. 建議建立 systemd 服務自動啟動

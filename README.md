@@ -10,6 +10,19 @@ litkitchen-server 是一個基於 FastAPI 的 Python 專案，使用 Poetry 管�
 - 自動格式化工具 (black, isort) 與 pre-commit 整合
 - 單元測試 (pytest)
 
+## 下載專案原始碼
+
+建議於 `/app` 目錄下下載專案原始碼：
+
+```bash
+sudo mkdir -p /app
+sudo chown $(whoami):$(whoami) /app
+cd /app
+git clone https://github.com/icycandle/litkitchen-server .
+```
+
+---
+
 ## 安裝方式（含 Raspberry Pi Zero 2W）
 
 ### 一鍵安裝（建議於 Raspberry Pi Zero 2W 上執行）
@@ -18,10 +31,24 @@ litkitchen-server 是一個基於 FastAPI 的 Python 專案，使用 Poetry 管�
 bash script/install.sh
 ```
 
-- 會自動安裝 Python、相依套件、poetry、印表機字型與權限設定
+- 會自動安裝 Python、相依套件、poetry、印表機字型、Epson TM 系列 CUPS 驅動與權限設定
 - 安裝完畢請依提示重插印表機或重啟
 
 ### 手動安裝（開發機/非 Pi）
+
+#### 若需手動安裝 Epson TM 系列 CUPS 驅動，請執行：
+```bash
+curl -L -O https://download3.ebz.epson.net/dsc/f/03/00/15/43/85/48dcd8b5c280c4d4fa10a23b3997eb05872b7ba2/tmx-cups-src-ThermalReceipt-3.0.0.0.tar.gz
+
+# 解壓縮
+ tar -zxvf tmx-cups-src-ThermalReceipt-3.0.0.0.tar.gz
+ cd tmx-cups-src-ThermalReceipt-3.0.0.0/Thermal\ Receipt
+
+# 編譯與安裝
+ sudo ./build.sh
+ sudo ./install.sh
+ cd /app
+```
 
 ```bash
 sudo apt update && sudo apt install pipx python3
@@ -67,7 +94,7 @@ poetry run uvicorn main:app --reload
 
 1. 複製 systemd 服務單元檔
 ```bash
-sudo cp script/litkitchen-server.service /etc/systemd/system/
+sudo cp /app/script/litkitchen-server.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable litkitchen-server
 sudo systemctl start litkitchen-server
@@ -84,8 +111,8 @@ docker exec -it litkitchen-server bash
 ```
 2. 在 container 內執行安裝與 systemd 測試：
 ```bash
-bash script/install.sh
-sudo cp script/litkitchen-server.service /etc/systemd/system/
+bash /app/script/install.sh
+sudo cp /app/script/litkitchen-server.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable litkitchen-server
 sudo systemctl start litkitchen-server
