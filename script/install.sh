@@ -37,7 +37,7 @@ $SUDO udevadm trigger
 # 5. 安裝 Epson TM 系列 CUPS 驅動
 printf '\n[INFO] 安裝 Epson TM 系列 CUPS 驅動（使用內建 vendor/tmx-cups-src-ThermalReceipt-3.0.0.0.tar）\n'
 tar -xvf vendor/tmx-cups-src-ThermalReceipt-3.0.0.0.tar
-cd tmx-cups-src-ThermalReceipt-3.0.0.0/Thermal\ Receipt
+cd "Thermal Receipt"
 $SUDO ./build.sh
 $SUDO ./install.sh
 cd /app
