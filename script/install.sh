@@ -46,7 +46,5 @@ cd /app
 printf '\n[INFO] 請重新插拔印表機，或重啟 Raspberry Pi 以套用 USB 權限設定\n'
 
 # 6. 建議建立 systemd 服務自動啟動
-printf '\n[INFO] 建議執行 sudo cp script/litkitchen-server.service /etc/systemd/system/ 並啟用服務\n'
-printf '    sudo systemctl daemon-reload\n'
-printf '    sudo systemctl enable litkitchen-server\n'
-printf '    sudo systemctl start litkitchen-server\n'
+printf '\n[INFO] 建議執行：\n'
+printf '    bash script/setup_systemd_service.sh\n'

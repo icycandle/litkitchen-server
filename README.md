@@ -92,11 +92,24 @@ poetry run uvicorn main:app --reload
 
 1. 複製 systemd 服務單元檔
 ```bash
+poetry run python /app/script/gen_service.py
 sudo cp /app/script/litkitchen-server.service /etc/systemd/system/
+# 請注意：User=請改成自己的帳號，例如 User=pi 或 User=icycandle
 sudo systemctl daemon-reload
 sudo systemctl enable litkitchen-server
 sudo systemctl start litkitchen-server
 ```
+
+#### 察看服務狀態
+```bash
+sudo systemctl status litkitchen-server
+```
+
+#### 查詢 systemd 服務最近 50 行日誌
+```bash
+sudo journalctl -u litkitchen-server.service -n 50
+```
+
 2. 開機自動啟動、異常自動重啟
 3. 預設服務運行於 `0.0.0.0:8000`
 
@@ -110,7 +123,9 @@ docker exec -it litkitchen-server bash
 2. 在 container 內執行安裝與 systemd 測試：
 ```bash
 bash /app/script/install.sh
+poetry run python /app/script/gen_service.py
 sudo cp /app/script/litkitchen-server.service /etc/systemd/system/
+# 請注意：User=請改成自己的帳號，例如 User=pi 或 User=icycandle
 sudo systemctl daemon-reload
 sudo systemctl enable litkitchen-server
 sudo systemctl start litkitchen-server
