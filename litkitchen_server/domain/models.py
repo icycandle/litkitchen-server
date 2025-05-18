@@ -71,8 +71,8 @@ class PrintJob(BaseModel):
 class BarcodeMapping(BaseModel):
     id: int | None = None
     barcode: str
-    main_dish_text_id: int
-    side_dish_media_id: int
-    drink_style_id: int
+    main_dish_text_id: int | None = None
+    side_dish_media_id: int | None = None
+    drink_style_id: int | None = None
     description: str = ""
     created_at: datetime = datetime.now()

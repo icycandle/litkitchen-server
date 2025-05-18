@@ -150,9 +150,9 @@ class PrintJobSchema(BaseModel):
 class BarcodeMappingSchema(BaseModel):
     id: int
     barcode: str
-    main_dish_text_id: int
-    side_dish_media_id: int
-    drink_style_id: int
+    main_dish_text_id: int | None = None
+    side_dish_media_id: int | None = None
+    drink_style_id: int | None = None
     description: Optional[str] = ""
     created_at: str = ""
 
@@ -173,7 +173,7 @@ class BarcodeMappingSchema(BaseModel):
 
 class BarcodeMappingCreateSchema(BaseModel):
     barcode: str
-    main_dish_text_id: int
-    side_dish_media_id: int
-    drink_style_id: int
+    main_dish_text_id: int | None = None
+    side_dish_media_id: int | None = None
+    drink_style_id: int | None = None
     description: Optional[str] = ""
