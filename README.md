@@ -1,5 +1,29 @@
 # litkitchen-server
 
+## TextVariant CLI 操作
+
+### 單筆新增 TextVariant
+
+使用 typer CLI 互動式新增一筆 TextVariant 至 sqlite：
+
+```bash
+poetry run python -m litkitchen_server.cli_textvariant add
+```
+
+系統會依序提示欄位（main_dish_text_id, side_dish_media_id, drink_style_id, content, variant_index, length, approved, print_count）
+
+### 批次匯入 TextVariant
+
+可用 csv 檔案批次匯入多筆資料：
+
+```bash
+poetry run python -m litkitchen_server.cli_textvariant <csv_path>
+```
+
+csv 欄位需包含：main_dish_text_id, side_dish_media_id, drink_style_id, content, variant_index, length, approved, print_count
+
+---
+
 litkitchen-server 是一個基於 FastAPI 的 Python 專案，使用 Poetry 管理依賴。
 
 ## 主要特性

@@ -10,6 +10,36 @@ from litkitchen_server.infrastructure.repository_sqlite import engine
 from litkitchen_server.infrastructure.models import TextVariantOrm
 import os
 
+app = typer.Typer()
+
+
+@app.command()
+def add(
+    main_dish_text_id: int = typer.Option(..., prompt=True),
+    side_dish_media_id: int = typer.Option(..., prompt=True),
+    drink_style_id: int = typer.Option(..., prompt=True),
+    content: str = typer.Option(..., prompt=True),
+    variant_index: int = typer.Option(0, prompt=True),
+    length: int = typer.Option(0, prompt=True),
+    approved: bool = typer.Option(False, prompt=True),
+    print_count: int = typer.Option(0, prompt=True),
+):
+    """新增一筆 TextVariant 到 sqlite"""
+    tv = TextVariantOrm(
+        main_dish_text_id=main_dish_text_id,
+        side_dish_media_id=side_dish_media_id,
+        drink_style_id=drink_style_id,
+        content=content,
+        variant_index=variant_index,
+        length=length,
+        approved=approved,
+        print_count=print_count,
+    )
+    with Session(engine) as session:
+        repo = TextVariantRepository(session)
+        repo.create(tv)
+    typer.echo("已新增一筆 TextVariant")
+
 
 def import_csv(csv_path: str):
     """
@@ -52,4 +82,4 @@ def main(csv_path: str):
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
