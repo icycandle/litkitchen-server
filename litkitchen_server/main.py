@@ -11,11 +11,17 @@ sentry_sdk.init(
 
 app = FastAPI(title="litkitchen-server")
 
-# 加入 CORS middleware 允許前端 dev server 跨域
+# 加入 CORS middleware 允許前端 dev server 與區網/本機 HTTPS 跨域
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "https://raspberrypi.local",
+        "https://localhost",
+        "http://localhost:5173",
+        # 區網常見 IP，可依實際情況增減
+        *[f"https://192.168.{i}.{j}" for i in range(0, 256) for j in range(0, 256)],
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
