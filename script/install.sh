@@ -13,6 +13,7 @@ fi
 $SUDO apt update
 $SUDO apt install -y python3 python3-pip python3-venv git \
     libnss3-tools mkcert \
+    nginx \
     fonts-noto-cjk imagemagick libusb-1.0-0-dev cups
 
 # 2. 安裝 pipx 與 poetry

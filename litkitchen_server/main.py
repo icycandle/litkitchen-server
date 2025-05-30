@@ -9,7 +9,12 @@ sentry_sdk.init(
     send_default_pii=settings.SENTRY_SEND_DEFAULT_PII,
 )
 
-app = FastAPI(title="litkitchen-server")
+app = FastAPI(
+    title="litkitchen-server",
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    openapi_url="/api/openapi.json",
+)
 
 # 加入 CORS middleware 允許前端 dev server 與區網/本機 HTTPS 跨域
 
@@ -35,4 +40,4 @@ try:
 except Exception as e:
     print(f"[WARN] options fixture insert failed: {e}")
 
-app.include_router(api_router)
+app.include_router(api_router, prefix="/api")
