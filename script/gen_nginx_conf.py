@@ -5,6 +5,7 @@ import socket
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "../nginx/litkitchen.conf.tpl")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "../nginx/litkitchen.conf")
+DEFAULT_OUTPUT_PATH = "/etc/nginx/conf.d/litkitchen.conf"
 
 DEFAULT_STATIC_ROOT = "/app/frontend/dist"
 DEFAULT_SERVER_NAME = "_"
@@ -64,6 +65,15 @@ def render_template(template_path: str, output_path: str, context: dict):
     print(f"✅ 已產生 nginx 設定檔: {output_path}")
 
 
+def reload_nginx():
+    print("🔄 重新載入 nginx 服務...")
+    try:
+        subprocess.run(["sudo", "systemctl", "reload", "nginx"], check=True)
+        print("✅ nginx 已重新載入")
+    except subprocess.CalledProcessError as e:
+        print(f"[ERROR] 重新載入 nginx 失敗: {e}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="產生 nginx 設定檔並自動用 mkcert 產生憑證（如需要）"
@@ -78,6 +88,11 @@ def main():
     parser.add_argument("--ssl-key", default=DEFAULT_SSL_KEY, help="SSL 私鑰路徑")
     parser.add_argument(
         "--domains", nargs="*", help="mkcert 憑證 domain 清單（預設自動偵測）"
+    )
+    parser.add_argument(
+        "--output-path",
+        default=DEFAULT_OUTPUT_PATH,
+        help="nginx 設定檔輸出路徑 (預設 /etc/nginx/conf.d/litkitchen.conf)",
     )
     args = parser.parse_args()
 
@@ -95,7 +110,11 @@ def main():
         "ssl_cert": args.ssl_cert,
         "ssl_key": args.ssl_key,
     }
-    render_template(TEMPLATE_PATH, OUTPUT_PATH, context)
+    # 若 output_path 沒有被指定，則同時寫入 repo 內與 /etc/nginx/conf.d/
+    if args.output_path == DEFAULT_OUTPUT_PATH:
+        render_template(TEMPLATE_PATH, OUTPUT_PATH, context)
+    render_template(TEMPLATE_PATH, args.output_path, context)
+    reload_nginx()
 
 
 if __name__ == "__main__":
