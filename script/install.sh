@@ -50,3 +50,7 @@ printf '\n[INFO] 請重新插拔印表機，或重啟 Raspberry Pi 以套用 USB
 # 6. 建議建立 systemd 服務自動啟動
 printf '\n[INFO] 建議執行：\n'
 printf '    bash script/setup_systemd_service.sh\n'
+
+# # 7. 安裝 cloudflared
+curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb -o cloudflared.deb
+$SUDO dpkg -i cloudflared.deb
