@@ -1,14 +1,23 @@
 server {
-    listen 443 ssl;
-    server_name {{ server_name }};
+    listen 80;
+    server_name {{ server_name }} lk-raspberrypi.local literary-kitchen-tw.uk;
 
-    ssl_certificate     {{ ssl_cert }};
-    ssl_certificate_key {{ ssl_key }};
+    # 啟用 gzip 壓縮
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript image/svg+xml;
+    gzip_min_length 1024;
+    gzip_comp_level 6;
+    gzip_vary on;
 
     # 靜態檔案
     location / {
         root {{ static_root }};
         try_files $uri $uri/ /index.html;
+        # 靜態資源快取 30 天
+        if ($request_uri ~* \.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$) {
+            expires 30d;
+            add_header Cache-Control "public";
+        }
     }
 
     # API 反向代理
