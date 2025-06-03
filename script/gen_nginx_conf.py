@@ -96,13 +96,19 @@ def main():
     )
     args = parser.parse_args()
 
-    if args.domains:
-        domains = args.domains
-    else:
-        local_ip = get_local_ip()
-        domains = ["raspberrypi.local", "localhost", "127.0.0.1", local_ip]
-
-    ensure_mkcert_cert(args.ssl_cert, args.ssl_key, domains)
+    # if args.domains:
+    #     domains = args.domains
+    # else:
+    #     local_ip = get_local_ip()
+    #     domains = [
+    #         "raspberrypi.local",
+    #         "localhost",
+    #         "127.0.0.1",
+    #         local_ip,
+    #         "lk-raspberrypi.local",
+    #         "literary-kitchen-tw.uk",
+    #     ]
+    # ensure_mkcert_cert(args.ssl_cert, args.ssl_key, domains)
 
     context = {
         "static_root": args.static_root,

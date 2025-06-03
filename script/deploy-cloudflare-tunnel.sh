@@ -37,6 +37,9 @@ ingress:
   - hostname: $DOMAIN
     service: http://localhost:80
   - service: http_status:404
+
+# 控制 tunnel 連線數
+connections: 1
 EOF
 
 echo "🌐 將 DNS CNAME 指向 tunnel..."
