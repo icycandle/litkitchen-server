@@ -41,7 +41,8 @@ def add(
     typer.echo("已新增一筆 TextVariant")
 
 
-def import_csv(csv_path: str):
+@app.command()
+def import_csv(csv_path: str = typer.Argument(..., help="CSV 檔案路徑")):
     """
     批次匯入 TextVariant 資料。
     CSV 欄位：main_dish_text_id,side_dish_media_id,drink_style_id,content,variant_index,length,approved,print_count
