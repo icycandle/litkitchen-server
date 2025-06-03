@@ -38,7 +38,7 @@ class ReceiptPrinterService:
         self.font_size = 28
         self.chars_per_line = 16
         self.line_height = 36
-        self.img_width = 480
+        self.img_width = 498
         self.header_image_path = os.path.join(REPO_ROOT, "header.png")
         self.footer_image_path = os.path.join(REPO_ROOT, "footer.png")
 
@@ -77,7 +77,8 @@ class ReceiptPrinterService:
             try:
                 header_img = Image.open(self.header_image_path)
                 # header_img = header_img.convert("1")
-                p.image(header_img)
+                # 水平置中
+                p.image(header_img, center=True)
             except Exception as e:
                 logging.warning(f"Header image error: {e}")
 
@@ -89,8 +90,24 @@ class ReceiptPrinterService:
             img_height = self.line_height * len(wrapped_lines)
             img = Image.new("L", (self.img_width, img_height), color=255)
             draw = ImageDraw.Draw(img)
+            w_list = []
+            bbox_list = []
             for i, line in enumerate(wrapped_lines):
-                draw.text((10, i * self.line_height), line, font=font, fill=0)
+                bbox = draw.textbbox((0, 0), line, font=font)
+                w = bbox[2] - bbox[0]
+                w_list.append(w)
+                bbox_list.append(bbox)
+                # x = (self.img_width - w) // 2
+                # draw.text((x, i * self.line_height), line, font=font, fill=0)
+
+            # img 水平置中
+            max_w = max(w_list)
+            for i, bbox in enumerate(bbox_list):
+                x = (self.img_width - max_w) // 2
+                draw.text(
+                    (x, i * self.line_height), wrapped_lines[i], font=font, fill=0
+                )
+
             p.image(img)
 
             # 這裡希望多一點空白大約 20px
@@ -100,7 +117,7 @@ class ReceiptPrinterService:
             try:
                 footer_img = Image.open(self.footer_image_path)
                 # footer_img = footer_img.convert("1")
-                p.image(footer_img)
+                p.image(footer_img, center=True)
             except Exception as e:
                 logging.warning(f"Footer image error: {e}")
 
