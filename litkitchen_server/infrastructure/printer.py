@@ -93,6 +93,9 @@ class ReceiptPrinterService:
                 draw.text((10, i * self.line_height), line, font=font, fill=0)
             p.image(img)
 
+            # 這裡希望多一點空白大約 20px
+            p.text("\n")
+
             # 列印 footer 圖片
             try:
                 footer_img = Image.open(self.footer_image_path)
