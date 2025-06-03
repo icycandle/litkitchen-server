@@ -36,7 +36,7 @@ class ReceiptPrinterService:
         self.product_id = 0x0202
         self.font_path = "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"
         self.font_size = 28
-        self.chars_per_line = 20
+        self.chars_per_line = 16
         self.line_height = 36
         self.img_width = 480
         self.header_image_path = os.path.join(REPO_ROOT, "header.png")
