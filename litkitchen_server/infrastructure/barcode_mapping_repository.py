@@ -1,9 +1,10 @@
+from litkitchen_server.domain.repository import IBarcodeMappingRepository
 from litkitchen_server.infrastructure.models import BarcodeMappingOrm
 from litkitchen_server.domain.models import BarcodeMapping
 from sqlmodel import Session, select
 
 
-class BarcodeMappingRepository:
+class BarcodeMappingRepository(IBarcodeMappingRepository):
     def __init__(self, session: Session):
         self.session = session
 

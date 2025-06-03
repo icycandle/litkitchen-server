@@ -20,6 +20,10 @@ def options_fixture():
     session.exec(text("DELETE FROM maindishtexts"))
     session.exec(text("DELETE FROM sidedishmedias"))
     session.exec(text("DELETE FROM drinkstyles"))
+    # 重設 autoincrement
+    session.exec(text("DELETE FROM sqlite_sequence WHERE name='maindishtexts'"))
+    session.exec(text("DELETE FROM sqlite_sequence WHERE name='sidedishmedias'"))
+    session.exec(text("DELETE FROM sqlite_sequence WHERE name='drinkstyles'"))
     session.commit()
 
     main_dishes = [
@@ -163,5 +167,9 @@ def options_fixture():
     session.exec(text("DELETE FROM maindishtexts"))
     session.exec(text("DELETE FROM sidedishmedias"))
     session.exec(text("DELETE FROM drinkstyles"))
+    # 重設 autoincrement
+    session.exec(text("DELETE FROM sqlite_sequence WHERE name='maindishtexts'"))
+    session.exec(text("DELETE FROM sqlite_sequence WHERE name='sidedishmedias'"))
+    session.exec(text("DELETE FROM sqlite_sequence WHERE name='drinkstyles'"))
     session.commit()
     session.close()

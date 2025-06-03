@@ -1,9 +1,10 @@
+from litkitchen_server.domain.repository import IDrinkStyleRepository
 from litkitchen_server.infrastructure.models import DrinkStyleOrm
 from litkitchen_server.domain.models import DrinkStyle
 from sqlmodel import Session, select
 
 
-class DrinkStyleRepository:
+class DrinkStyleRepository(IDrinkStyleRepository):
     def __init__(self, session: Session):
         self.session = session
 

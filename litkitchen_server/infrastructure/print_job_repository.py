@@ -1,9 +1,10 @@
+from litkitchen_server.domain.repository import IPrintJobRepository
 from litkitchen_server.infrastructure.models import PrintJobOrm
 from litkitchen_server.domain.models import PrintJob
 from sqlmodel import Session, select
 
 
-class PrintJobRepository:
+class PrintJobRepository(IPrintJobRepository):
     def __init__(self, session: Session):
         self.session = session
 

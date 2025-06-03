@@ -1,4 +1,4 @@
-from sqlmodel import Session
+from sqlmodel import Session, select
 from litkitchen_server.infrastructure.repository_provider import engine
 from litkitchen_server.infrastructure.models import (
     MainDishTextOrm,
@@ -11,9 +11,9 @@ def insert_options_fixture():
     session = Session(engine)
     # 若已存在資料則跳過
     if (
-        session.query(MainDishTextOrm).first()
-        or session.query(SideDishMediaOrm).first()
-        or session.query(DrinkStyleOrm).first()
+        session.exec(select(MainDishTextOrm)).first()
+        or session.exec(select(SideDishMediaOrm)).first()
+        or session.exec(select(DrinkStyleOrm)).first()
     ):
         session.close()
         return

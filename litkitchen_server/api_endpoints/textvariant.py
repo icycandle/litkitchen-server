@@ -4,9 +4,10 @@ from fastapi import Depends
 from litkitchen_server.api.schemas import TextVariantSchema
 from fastapi import Query
 from litkitchen_server.domain.repository import (
-    DrinkStyleRepository,
-    MainDishTextRepository,
-    SideDishMediaRepository,
+    IDrinkStyleRepository,
+    IMainDishTextRepository,
+    ISideDishMediaRepository,
+    ITextVariantRepository,
 )
 from litkitchen_server.infrastructure.printer import PrintJobParams, get_printer_worker
 from litkitchen_server.infrastructure.text_variant_repository import (
@@ -66,10 +67,10 @@ def print_count_pick_best(
     main_dish_text_id: int,
     side_dish_media_id: int,
     drink_style_id: int,
-    repo: TextVariantRepository = Depends(get_text_variant_repo),
-    main_dish_repo: MainDishTextRepository = Depends(get_main_dish_text_repo),
-    side_dish_media_repo: SideDishMediaRepository = Depends(get_side_dish_media_repo),
-    drink_style_repo: DrinkStyleRepository = Depends(get_drink_style_repo),
+    repo: ITextVariantRepository = Depends(get_text_variant_repo),
+    main_dish_repo: IMainDishTextRepository = Depends(get_main_dish_text_repo),
+    side_dish_media_repo: ISideDishMediaRepository = Depends(get_side_dish_media_repo),
+    drink_style_repo: IDrinkStyleRepository = Depends(get_drink_style_repo),
     printer_worker=Depends(get_printer_worker),
 ):
     """
@@ -91,9 +92,9 @@ def print_count_pick_best(
     # 再於這些中找 id 最小
     chosen = min(min_candidates, key=lambda tv: tv.id)
 
-    main_dish_text = main_dish_repo.get_maindishtext(main_dish_text_id)
-    side_dish_media = side_dish_media_repo.get_sidedishmedia(side_dish_media_id)
-    drink_style = drink_style_repo.get_drinkstyle(drink_style_id)
+    main_dish_text = main_dish_repo.get(main_dish_text_id)
+    side_dish_media = side_dish_media_repo.get(side_dish_media_id)
+    drink_style = drink_style_repo.get(drink_style_id)
 
     # 印表機列印
     ok = printer_worker.submit_print(

@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from fastapi import Depends
-from litkitchen_server.infrastructure.printer import get_printer_worker
-from litkitchen_server.api.schemas import PrintJobSchema
-from litkitchen_server.infrastructure.print_job_repository import PrintJobRepository
-from litkitchen_server.infrastructure.text_variant_repository import (
-    TextVariantRepository,
+from litkitchen_server.domain.repository import (
+    IPrintJobRepository,
+    ITextVariantRepository,
 )
+from litkitchen_server.infrastructure.printer import PrinterWorker, get_printer_worker
+from litkitchen_server.api.schemas import PrintJobSchema
 from litkitchen_server.infrastructure.repository_provider import (
     get_print_job_repo,
     get_text_variant_repo,
@@ -20,8 +20,8 @@ router = APIRouter()
 @router.post("/print-jobs", response_model=PrintJobSchema)
 def create_print_job(
     item: PrintJobSchema,
-    printjob_repo: PrintJobRepository = Depends(get_print_job_repo),
-    textvariant_repo: TextVariantRepository = Depends(get_text_variant_repo),
+    printjob_repo: IPrintJobRepository = Depends(get_print_job_repo),
+    textvariant_repo: ITextVariantRepository = Depends(get_text_variant_repo),
 ):
     tv = textvariant_repo.get(item.text_variant_id)
     if not tv:
@@ -45,10 +45,9 @@ def create_print_job(
 
 
 @router.get("/printer-status")
-def get_printer_status(printer_worker=Depends(get_printer_worker)):
+def get_printer_status(printer_worker: PrinterWorker = Depends(get_printer_worker)):
     return {
-        "status": printer_worker.get_status().value,
-        "description": printer_worker.get_status().description(),
+        "status": printer_worker.get_status(),
     }
 
 

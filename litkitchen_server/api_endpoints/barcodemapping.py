@@ -2,9 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from fastapi import Depends
 from litkitchen_server.api.schemas import BarcodeMappingSchema
-from litkitchen_server.infrastructure.barcode_mapping_repository import (
-    BarcodeMappingRepository,
-)
+from litkitchen_server.domain.repository import IBarcodeMappingRepository
 from litkitchen_server.infrastructure.repository_provider import (
     get_barcode_mapping_repo,
 )
@@ -20,7 +18,7 @@ router = APIRouter()
 
 @router.get("/", response_model=list[BarcodeMappingSchema])
 def get_barcodemappings(
-    repo: BarcodeMappingRepository = Depends(get_barcode_mapping_repo),
+    repo: IBarcodeMappingRepository = Depends(get_barcode_mapping_repo),
 ):
     result = repo.get_all()
     return [BarcodeMappingSchema.from_domain(item) for item in result]
@@ -29,7 +27,7 @@ def get_barcodemappings(
 @router.post("/", response_model=BarcodeMappingSchema)
 def create_barcodemapping(
     item: BarcodeMappingCreateSchema,
-    repo: BarcodeMappingRepository = Depends(get_barcode_mapping_repo),
+    repo: IBarcodeMappingRepository = Depends(get_barcode_mapping_repo),
 ):
     # 將 create schema 轉 domain model，id/created_at 由後端補上
     barcode_item = item.model_dump()
@@ -42,7 +40,7 @@ def create_barcodemapping(
 
 @router.delete("/{item_id}")
 def delete_barcodemapping(
-    item_id: int, repo: BarcodeMappingRepository = Depends(get_barcode_mapping_repo)
+    item_id: int, repo: IBarcodeMappingRepository = Depends(get_barcode_mapping_repo)
 ):
     deleted = repo.delete(item_id)
     if deleted:

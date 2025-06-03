@@ -1,9 +1,10 @@
+from litkitchen_server.domain.repository import IMainDishTextRepository
 from litkitchen_server.infrastructure.models import MainDishTextOrm
 from litkitchen_server.domain.models import MainDishText
 from sqlmodel import Session, select
 
 
-class MainDishTextRepository:
+class MainDishTextRepository(IMainDishTextRepository):
     def __init__(self, session: Session):
         self.session = session
 

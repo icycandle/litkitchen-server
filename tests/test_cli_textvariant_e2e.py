@@ -32,6 +32,7 @@ def test_cli_import_textvariant(tmp_path):
             "python",
             "-m",
             "litkitchen_server.cli_textvariant",
+            "import-csv",
             str(test_csv),
         ],
         capture_output=True,

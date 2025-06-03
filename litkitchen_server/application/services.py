@@ -1,7 +1,7 @@
 from litkitchen_server.domain.repository import (
-    TextVariantRepository,
-    PrintJobRepository,
-    MainDishTextRepository,
+    IMainDishTextRepository,
+    IPrintJobRepository,
+    ITextVariantRepository,
 )
 from litkitchen_server.domain.models import (
     TextVariant,
@@ -11,7 +11,7 @@ from litkitchen_server.domain.models import (
 
 
 class TextVariantService:
-    def __init__(self, repo: TextVariantRepository):
+    def __init__(self, repo: ITextVariantRepository):
         self.repo = repo
 
     def create_textvariant(self, item: TextVariant) -> TextVariant:
@@ -22,7 +22,7 @@ class TextVariantService:
 
 
 class PrintJobService:
-    def __init__(self, repo: PrintJobRepository):
+    def __init__(self, repo: IPrintJobRepository):
         self.repo = repo
 
     def create_printjob(self, item: PrintJob) -> PrintJob:
@@ -33,7 +33,7 @@ class PrintJobService:
 
 
 class MainDishTextService:
-    def __init__(self, repo: MainDishTextRepository):
+    def __init__(self, repo: IMainDishTextRepository):
         self.repo = repo
 
     def create_maindishtext(self, item: MainDishText) -> MainDishText:

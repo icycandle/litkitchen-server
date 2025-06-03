@@ -1,9 +1,10 @@
+from litkitchen_server.domain.repository import ITextVariantRepository
 from litkitchen_server.infrastructure.models import TextVariantOrm
 from litkitchen_server.domain.models import TextVariant
 from sqlmodel import Session, select
 
 
-class TextVariantRepository:
+class TextVariantRepository(ITextVariantRepository):
     def __init__(self, session: Session):
         self.session = session
 

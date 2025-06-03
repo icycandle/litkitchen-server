@@ -40,7 +40,7 @@ client = TestClient(app)
 
 @pytest.mark.e2e
 def test_get_options_maindish(options_fixture):
-    resp = client.get("/options/maindish")
+    resp = client.get("/api/options/maindish")
     assert resp.status_code == 200
     assert resp.json() == [
         {
@@ -165,7 +165,7 @@ def test_get_options_maindish(options_fixture):
 
 @pytest.mark.e2e
 def test_get_options_sidedish(options_fixture):
-    resp = client.get("/options/sidedish")
+    resp = client.get("/api/options/sidedish")
     assert resp.status_code == 200
     assert resp.json() == [
         {"id": 1, "media_type": "電影／劇集", "side_dish": "爆米花"},
@@ -178,7 +178,7 @@ def test_get_options_sidedish(options_fixture):
 
 @pytest.mark.e2e
 def test_get_options_drinkstyle(options_fixture):
-    resp = client.get("/options/drinkstyle")
+    resp = client.get("/api/options/drinkstyle")
     assert resp.status_code == 200
     assert resp.json() == [
         {"id": 1, "style": "蒙太奇", "drink": "烏龍茶"},

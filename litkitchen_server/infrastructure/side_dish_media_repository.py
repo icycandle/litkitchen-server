@@ -1,9 +1,10 @@
+from litkitchen_server.domain.repository import ISideDishMediaRepository
 from litkitchen_server.infrastructure.models import SideDishMediaOrm
 from litkitchen_server.domain.models import SideDishMedia
 from sqlmodel import Session, select
 
 
-class SideDishMediaRepository:
+class SideDishMediaRepository(ISideDishMediaRepository):
     def __init__(self, session: Session):
         self.session = session
 

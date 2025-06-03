@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS printjobs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     text_variant_id INTEGER,
     status TEXT,
-    created_at TEXT,
+    created_at TEXT
 );
 
 CREATE TABLE IF NOT EXISTS barcodemappings (
