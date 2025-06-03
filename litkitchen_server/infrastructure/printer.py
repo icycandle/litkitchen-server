@@ -65,7 +65,9 @@ class ReceiptPrinterService:
             )
             options_draw = ImageDraw.Draw(options_img)
             for i, line in enumerate(options_lines):
-                w, h = options_draw.textsize(line, font=font)
+                bbox = options_draw.textbbox((0, 0), line, font=font)
+                w = bbox[2] - bbox[0]
+                # h = bbox[3] - bbox[1]
                 x = (self.img_width - w) // 2
                 options_draw.text((x, i * self.line_height), line, font=font, fill=0)
 
