@@ -7,6 +7,26 @@ class TextVariantRepository:
     def __init__(self, session: Session):
         self.session = session
 
+    def query(
+        self,
+        main_dish_text_id: int,
+        side_dish_media_id: int,
+        drink_style_id: int,
+    ) -> list[TextVariant]:
+        """
+        filter by
+        `main_dish_text_id`
+        `side_dish_media_id`
+        `drink_style_id`
+        """
+        query = select(TextVariantOrm).where(
+            TextVariantOrm.main_dish_text_id == main_dish_text_id,
+            TextVariantOrm.side_dish_media_id == side_dish_media_id,
+            TextVariantOrm.drink_style_id == drink_style_id,
+        )
+        orm_list = self.session.exec(query).all()
+        return [orm.to_domain() for orm in orm_list]
+
     def get_all(self) -> list[TextVariant]:
         orm_list = self.session.exec(select(TextVariantOrm)).all()
         return [orm.to_domain() for orm in orm_list]

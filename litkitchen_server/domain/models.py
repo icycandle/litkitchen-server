@@ -35,6 +35,9 @@ class MainDishText(BaseModel):
     genre: str
     description: str = ""
 
+    def build_label(self) -> str:
+        return f"{self.author_name}《{self.work_title}》"
+
 
 class SideDishMedia(BaseModel):
     id: int | None = None

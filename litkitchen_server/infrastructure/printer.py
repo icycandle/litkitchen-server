@@ -1,3 +1,4 @@
+import os
 from escpos.printer import Usb
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
@@ -11,6 +12,18 @@ import threading
 import time
 from functools import lru_cache
 
+from litkitchen_server.settings import REPO_ROOT
+
+from dataclasses import dataclass
+
+
+@dataclass
+class PrintJobParams:
+    result_text: str
+    option_a_label: str
+    option_b_label: str
+    option_c_label: str
+
 
 class ReceiptPrinterService:
     """
@@ -23,22 +36,69 @@ class ReceiptPrinterService:
         self.product_id = 0x0202
         self.font_path = "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"
         self.font_size = 28
-        self.chars_per_line = 16
+        self.chars_per_line = 20
         self.line_height = 36
-        self.img_width = 384
+        self.img_width = 480
+        self.header_image_path = os.path.join(REPO_ROOT, "header.png")
+        self.footer_image_path = os.path.join(REPO_ROOT, "footer.png")
 
-    def print_text(self, text: str) -> bool:
+    def print_text(self, params: PrintJobParams) -> bool:
         try:
             self.status = PrintJobStatus.printing
             font = ImageFont.truetype(self.font_path, self.font_size)
-            wrapped_lines = textwrap.wrap(text, width=self.chars_per_line)
+
+            # 產生 options_text_img
+            options_text = "\n".join(
+                [
+                    "—" * 20,
+                    "・主食材區・",
+                    params.option_a_label,
+                    f"・配菜區・{params.option_b_label}",
+                    f"・飲品區・{params.option_c_label}",
+                    "—" * 20,
+                ]
+            )
+            options_lines = options_text.split("\n")
+            options_img_height = self.line_height * len(options_lines)
+            options_img = Image.new(
+                "L", (self.img_width, options_img_height), color=255
+            )
+            options_draw = ImageDraw.Draw(options_img)
+            for i, line in enumerate(options_lines):
+                w, h = options_draw.textsize(line, font=font)
+                x = (self.img_width - w) // 2
+                options_draw.text((x, i * self.line_height), line, font=font, fill=0)
+
+            p = Usb(self.vendor_id, self.product_id, 0)
+
+            # 列印 header 圖片
+            try:
+                header_img = Image.open(self.header_image_path)
+                # header_img = header_img.convert("1")
+                p.image(header_img)
+            except Exception as e:
+                logging.warning(f"Header image error: {e}")
+
+            # 列印 options_text_img
+            p.image(options_img)
+
+            # 列印文字圖片
+            wrapped_lines = textwrap.wrap(params.result_text, width=self.chars_per_line)
             img_height = self.line_height * len(wrapped_lines)
             img = Image.new("L", (self.img_width, img_height), color=255)
             draw = ImageDraw.Draw(img)
             for i, line in enumerate(wrapped_lines):
                 draw.text((10, i * self.line_height), line, font=font, fill=0)
-            p = Usb(self.vendor_id, self.product_id, 0)
             p.image(img)
+
+            # 列印 footer 圖片
+            try:
+                footer_img = Image.open(self.footer_image_path)
+                # footer_img = footer_img.convert("1")
+                p.image(footer_img)
+            except Exception as e:
+                logging.warning(f"Footer image error: {e}")
+
             p.cut()
             self.status = PrintJobStatus.done
             return True
@@ -63,9 +123,9 @@ class PrinterWorker:
         self.printer = printer
         threading.Thread(target=self._worker, daemon=True).start()
 
-    def submit_print(self, text: str) -> bool:
+    def submit_print(self, params: PrintJobParams) -> bool:
         try:
-            self._queue.put(text, block=False)
+            self._queue.put(params, block=False)
             return True
         except queue.Full:
             logging.warning("Printer queue is full. Rejecting new print job.")
@@ -73,9 +133,9 @@ class PrinterWorker:
 
     def _worker(self):
         while True:
-            text = self._queue.get()
+            params = self._queue.get()
             try:
-                self.printer.print_text(text)
+                self.printer.print_text(params)
             finally:
                 self._queue.task_done()
                 time.sleep(0.1)

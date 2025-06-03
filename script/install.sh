@@ -16,6 +16,7 @@ $SUDO apt install -y python3 python3-pip python3-venv git \
     nginx \
     build-essential cmake \
     libcupsimage2-dev \
+    libfreetype6-dev zlib1g-dev libjpeg-dev \
     fonts-noto-cjk imagemagick libusb-1.0-0-dev cups
 
 # 2. 安裝 pipx 與 poetry
