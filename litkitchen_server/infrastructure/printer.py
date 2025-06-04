@@ -43,6 +43,7 @@ class ReceiptPrinterService:
         self.footer_image_path = os.path.join(REPO_ROOT, "footer.png")
 
     def print_text(self, params: PrintJobParams) -> bool:
+        p = Usb(self.vendor_id, self.product_id, 0)
         try:
             self.status = PrintJobStatus.printing
             font = ImageFont.truetype(self.font_path, self.font_size)
@@ -67,17 +68,12 @@ class ReceiptPrinterService:
             for i, line in enumerate(options_lines):
                 bbox = options_draw.textbbox((0, 0), line, font=font)
                 w = bbox[2] - bbox[0]
-                # h = bbox[3] - bbox[1]
                 x = (self.img_width - w) // 2
                 options_draw.text((x, i * self.line_height), line, font=font, fill=0)
-
-            p = Usb(self.vendor_id, self.product_id, 0)
 
             # 列印 header 圖片
             try:
                 header_img = Image.open(self.header_image_path)
-                # header_img = header_img.convert("1")
-                # 水平置中
                 p.image(header_img, center=True)
             except Exception as e:
                 logging.warning(f"Header image error: {e}")
@@ -97,8 +93,6 @@ class ReceiptPrinterService:
                 w = bbox[2] - bbox[0]
                 w_list.append(w)
                 bbox_list.append(bbox)
-                # x = (self.img_width - w) // 2
-                # draw.text((x, i * self.line_height), line, font=font, fill=0)
 
             # img 水平置中
             max_w = max(w_list)
@@ -116,7 +110,6 @@ class ReceiptPrinterService:
             # 列印 footer 圖片
             try:
                 footer_img = Image.open(self.footer_image_path)
-                # footer_img = footer_img.convert("1")
                 p.image(footer_img, center=True)
             except Exception as e:
                 logging.warning(f"Footer image error: {e}")
@@ -131,6 +124,11 @@ class ReceiptPrinterService:
             else:
                 self.status = PrintJobStatus.error
             return False
+        finally:
+            try:
+                p.close()
+            except Exception as e:
+                logging.warning(f"Printer close error: {e}")
 
 
 class PrinterWorker:

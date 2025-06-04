@@ -99,9 +99,9 @@ def test_get_options_maindish(options_fixture):
         },
         {
             "id": 7,
-            "author_name": "張貴興",
-            "work_title": "野豬渡河",
-            "main_dish": "肉絲炒飯",
+            "author_name": "陳千武",
+            "work_title": "獵女犯",
+            "main_dish": "爪哇烤雞飯",
             "publisher": "時報",
             "genre": "小說",
             "description": "",
