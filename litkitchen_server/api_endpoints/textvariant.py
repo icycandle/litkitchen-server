@@ -62,7 +62,7 @@ def get_text_variant(
     raise HTTPException(status_code=404, detail="TextVariant not found")
 
 
-@router.get("/print/{main_dish_text_id}/{side_dish_media_id}/{drink_style_id}")
+@router.post("/print/{main_dish_text_id}/{side_dish_media_id}/{drink_style_id}")
 def print_count_pick_best(
     main_dish_text_id: int,
     side_dish_media_id: int,
