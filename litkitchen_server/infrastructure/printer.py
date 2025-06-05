@@ -40,7 +40,7 @@ class ReceiptPrinterService:
         self.line_height = 36
         self.img_width = 498
         self.header_image_path = os.path.join(REPO_ROOT, "header.png")
-        self.footer_image_path = os.path.join(REPO_ROOT, "footer.png")
+        self.footer_image_path = os.path.join(REPO_ROOT, "footer.jpg")
 
     def print_text(self, params: PrintJobParams) -> bool:
         p = Usb(self.vendor_id, self.product_id, 0)
